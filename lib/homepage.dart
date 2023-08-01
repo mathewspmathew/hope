@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:hope/noti.dart';
 
 class MyHomePage extends StatefulWidget {
   final String title;
@@ -37,9 +38,10 @@ class _MyHomePageState extends State<MyHomePage> {
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                // Add any functionality or navigation you want for the homepage
+                NotificationService()
+                    .showNotification(title: 'Sample title', body: 'It works!');
               },
-              child: Text('Logout'),
+              child: Text('Show Notification'),
             ),
           ],
         ),
