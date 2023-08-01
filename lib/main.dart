@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:hope/homepage.dart';
 import 'package:hope/login_screen.dart';
 
 void main() async {
@@ -17,7 +19,24 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'hope',
-      home: LoginScreen(),
+      home: StreamBuilder<User?>(
+          stream: FirebaseAuth.instance.authStateChanges(),
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            if (snapshot.hasError) {
+              return Text(snapshot.error.toString());
+            }
+            if (snapshot.connectionState == ConnectionState.active) {
+              if (snapshot.data == null) {
+                return LoginScreen();
+              } else {
+                return MyHomePage(
+                    title: FirebaseAuth.instance.currentUser!.displayName!);
+              }
+            }
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }),
     );
   }
 }
